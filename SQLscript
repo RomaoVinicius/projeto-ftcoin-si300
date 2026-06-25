@@ -1,0 +1,49 @@
+-- 1 Criando o database e selecionando-a para uso
+DROP DATABASE IF EXISTS ftcoin;
+CREATE DATABASE IF NOT EXISTS ftcoin;
+USE ftcoin;
+
+--2 Criando a tabela Carteira
+CREATE TABLE IF NOT EXISTS Carteira (
+    identificador INT PRIMARY KEY,
+    nomeTitular   VARCHAR(100) NOT NULL,
+    corretora     VARCHAR(100) NOT NULL
+);
+
+-- 3 Criando a tabela Movimentacao
+CREATE TABLE Movimentacao (
+    identificador INT PRIMARY KEY,
+    idCarteira    INT NOT NULL,
+    dataOperacao  DATE NOT NULL,
+    tipoOperacao  CHAR(1) NOT NULL,
+    quantidade    DECIMAL(18,8) NOT NULL CHECK (quantidade >= 0),
+    CONSTRAINT fk_movimentacao_carteira
+        FOREIGN KEY (idCarteira) REFERENCES Carteira(identificador)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT chk_tipo_operacao CHECK (tipoOperacao IN ('C','V'))
+) ENGINE=InnoDB;
+
+-- 4 Criando tabela Oraculo(COTAÇÂO)
+CREATE TABLE IF NOT EXISTS Oraculo (
+    dataCotacao DATE PRIMARY KEY,
+    cotacao     DECIMAL(18,8) NOT NULL CHECK (cotacao >= 0)
+);
+
+-- 5 Indices auxiliares para otimização de consultas
+CREATE INDEX idx_movimentacao_carteira ON Movimentacao(idCarteira);
+CREATE INDEX idx_movimentacao_data ON Movimentacao(dataOperacao);
+CREATE INDEX idx_oraculo_data ON Oraculo(dataCotacao);
+
+-- 6 Inserindo dados de exemplo
+-- INSERT INTO Carteira (identificador, nomeTitular, corretora) VALUES
+--    (1, 'Raissa Souza', 'Inter');
+--    (2, 'Vinicius Romao', 'Mercado Bitcoin');
+
+--INSERT INTO Oraculo (identificador, dataCotacao, cotacao) VALUES
+--    (1, '2026-06-01', 350.00),
+--    (2, '2026-06-02', 355.50);
+
+-- INSERT INTO Movimentacao (identificador, idCarteira, dataOperacao, tipoOperacao, quantidade) VALUES
+--    (1, 1, '2026-06-01', 'C', 2.5),
+--    (2, 1, '2026-06-02', 'V', 1.0);
