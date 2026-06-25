@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import src.controller.CarteiraController;
 import src.model.Carteira;
-//testando
+
 public class CarteiraView {
     private final CarteiraController controller;
     private final Scanner scanner;
@@ -17,12 +17,15 @@ public class CarteiraView {
     public void exibirMenu() {
         int opcao = 0;
         do {
-            System.out.println("\n=== SUBMENU: CARTEIRA ===");
+            System.out.println("\n=======================================");
+            System.out.println("          CARTEIRA       ");
+            System.out.println("=======================================");
             System.out.println("1. Incluir carteira");
             System.out.println("2. Consultar carteira");
             System.out.println("3. Editar carteira");
             System.out.println("4. Excluir carteira");
-            System.out.println("5. Voltar");
+            System.out.println("0. Voltar");
+            System.out.println("\n=======================================");
             System.out.print("Escolha uma opção: ");
 
             try {
@@ -34,14 +37,14 @@ public class CarteiraView {
                     case 2 -> consultar();
                     case 3 -> editar();
                     case 4 -> excluir();
-                    case 5 -> System.out.println("Saindo do menu de carteira...");
+                    case 0 -> System.out.println("Saindo do menu de carteira...");
                     default -> System.out.println("Opção inválida! Tente novamente.");
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Erro: Por favor, digite apenas números.");
                 scanner.nextLine();
             }
-        } while (opcao != 5);
+        } while (opcao != 0);
     }
 
     private void incluir() {

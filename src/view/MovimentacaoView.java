@@ -23,13 +23,16 @@ public class MovimentacaoView {
     public void exibirMenu(int idCarteira) {
         int opcao = -1;
         while (opcao != 0) {
-            System.out.println("\n===== MOVIMENTAÇÕES =====");
+            System.out.println("\n=======================================");
+            System.out.println("          MOVIMENTAÇÕES       ");
+            System.out.println("=======================================");
             System.out.println("1. Registrar Compra");
             System.out.println("2. Registrar Venda");
             System.out.println("3. Listar Movimentações da Carteira");
             System.out.println("4. Consultar Saldo de Moedas");
             System.out.println("0. Voltar");
-            System.out.print("Opção: ");
+            System.out.println("\n=======================================");
+            System.out.print("Escolha uma opção: ");
 
             opcao = lerInt();
             switch (opcao) {
@@ -44,7 +47,7 @@ public class MovimentacaoView {
     }
 
     private void telaRegistrarCompra(int idCarteira) {
-        System.out.println("\n--- Registrar Compra ---");
+        System.out.println("\n-----| Registrar Compra |-----");
         LocalDate data = lerData();
         if (data == null) return;
         BigDecimal quantidade = lerBigDecimal("Quantidade de moedas: ");
@@ -57,7 +60,7 @@ public class MovimentacaoView {
     }
 
     private void telaRegistrarVenda(int idCarteira) {
-        System.out.println("\n--- Registrar Venda ---");
+        System.out.println("\n-----| Registrar Venda |-----");
         LocalDate data = lerData();
         if (data == null) return;
         BigDecimal quantidade = lerBigDecimal("Quantidade de moedas: ");
@@ -70,7 +73,7 @@ public class MovimentacaoView {
     }
 
     private void telaListar(int idCarteira) {
-        System.out.println("\n--- Movimentações da Carteira ---");
+        System.out.println("\n-----| Movimentações da Carteira |-----");
         List<Movimentacao> lista = controller.listarPorCarteira();
         if (lista.isEmpty()) {
             System.out.println("Nenhuma movimentação encontrada.");

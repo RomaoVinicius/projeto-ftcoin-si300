@@ -19,14 +19,16 @@ public class RelatorioView {
     public void exibirMenu() {
         int opcao = 0;
         do {
-            System.out.println("\n=========|| MENU RELATÓRIOS ||=========");
+            System.out.println("\n=======================================");
+            System.out.println("          RELATÓRIOS        ");
+            System.out.println("=======================================");
             System.out.println();
             System.out.println("1. Listar carteiras (Ordenadas por ID)");
             System.out.println("2. Listar carteiras (Ordenadas por Nome)");
             System.out.println("3. Exibir saldo atual de uma carteira");
             System.out.println("4. Exibir histórico de movimentações");
             System.out.println("5. Exibir ganho ou perda total");
-            System.out.println("6. Voltar ao menu principal");
+            System.out.println("0. Voltar ao menu principal");
             System.out.println("\n=======================================");
             System.out.println();
             System.out.print("Escolha uma opção: ");
@@ -69,13 +71,13 @@ public class RelatorioView {
                                 c.getIdentificador(), c.getNomeTitular(), resultado, status);
                         }
                     }
-                    case 6 -> System.out.println("Voltando...");
+                    case 0 -> System.out.println("Voltando...");
                     default -> System.out.println("Opção inválida!");
                 }
             } catch (Exception e) {
                 System.out.println("Erro: " + e.getMessage());
-                scanner.nextLine(); // Evita o loop infinito 
+                scanner.nextLine();
             }
-        } while (opcao != 6);
+        } while (opcao != 0);
     }
 }

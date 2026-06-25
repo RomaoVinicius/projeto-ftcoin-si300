@@ -14,7 +14,7 @@ public class AjudaController {
     public void iniciar() {
         int opcao;
         do {
-            opcao = view.exibirMenuAjuda();
+            opcao = view.exibirMenu();
 
             switch (opcao) {
                 case 1:

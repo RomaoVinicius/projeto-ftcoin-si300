@@ -11,10 +11,10 @@ public class AjudaView {
         this.scanner = new Scanner(System.in);
     }
 
-    public int exibirMenuAjuda() {
-        System.out.println("\n=================================");
-        System.out.println("          MENU DE AJUDA          ");
-        System.out.println("=================================");
+    public int exibirMenu() {
+        System.out.println("\n=======================================");
+            System.out.println("          MENU DE AJUDA       ");
+            System.out.println("=======================================");
         System.out.println("1. Como usar o sistema (Ajuda)");
         System.out.println("2. Créditos do Sistema");
         System.out.println("0. Voltar ao Menu Principal");
@@ -28,7 +28,7 @@ public class AjudaView {
     }
 
     public void exibirTextoAjuda() {
-        System.out.println("\n--- COMO USAR O FT COIN ---");
+        System.out.println("\n-----| COMO USAR O FT COIN |-----");
         System.out.println("O FT Coin é um sistema de acompanhamento de carteira de moeda virtual.");
         System.out.println("\nFUNCIONALIDADES:");
         System.out.println("- CARTEIRA: Você pode incluir, consultar, editar ou excluir suas carteiras.");
@@ -40,7 +40,7 @@ public class AjudaView {
     }
 
     public void exibirCreditos() {
-        System.out.println("\n--- CRÉDITOS DO SISTEMA ---");
+        System.out.println("\n-----| CRÉDITOS DO SISTEMA |-----");
         System.out.println("Sistema: FT Coin");
         System.out.println("Versão: 1.0");
         System.out.println("Data: Junho de 2026");
