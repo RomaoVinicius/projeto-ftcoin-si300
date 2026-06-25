@@ -5,6 +5,8 @@ import java.util.List;
 
 import src.dao.MovimentacaoDAO;
 import src.model.Movimentacao;
+import src.model.TipoMovimentacao;
+import src.db.DatabaseConnection;
 
 import java.math.BigDecimal;// adicionado para uso de BigDecimal, sugestão do VScode 
 
@@ -19,7 +21,7 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
 
             ps.setInt(1, movimentacao.getIdCarteira());
             ps.setDate(2, Date.valueOf(movimentacao.getDataOperacao()));
-            ps.setString(3, String.valueOf(movimentacao.getTipoOperacao()));
+            ps.setString(3, String.valueOf(movimentacao.getTipoMovimentacao()));
             ps.setBigDecimal(4, movimentacao.getQuantidade());
             ps.executeUpdate();
 
@@ -58,7 +60,7 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
                 .getConexao().prepareStatement(sql)) {
 
             ps.setDate(1, Date.valueOf(movimentacao.getDataOperacao()));
-            ps.setString(2, String.valueOf(movimentacao.getTipoOperacao()));
+            ps.setString(2, String.valueOf(movimentacao.getTipoMovimentacao()));
             ps.setBigDecimal(3, movimentacao.getQuantidade());
             ps.setInt(4, movimentacao.getIdMovimento());
             ps.executeUpdate();
@@ -97,7 +99,7 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
         return lista;
     }
 
-    @Override
+    
     public List<Movimentacao> listarPorCarteira(int idCarteira) {
         List<Movimentacao> lista = new ArrayList<>();
         String sql = "SELECT * FROM Movimentacao WHERE idCarteira = ? ORDER BY dataOperacao";
@@ -118,12 +120,15 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
 
     private Movimentacao mapear(ResultSet rs) throws SQLException {
         BigDecimal quantidade = rs.getBigDecimal("quantidade");
+        BigDecimal cotacaoNaData = rs.getBigDecimal("cotacaoNaData");
+        TipoMovimentacao tipo = TipoMovimentacao.valueOf(rs.getString("TipoOpercao"));
         return new Movimentacao(
                 rs.getInt("idMovimento"),
                 rs.getInt("idCarteira"),
                 rs.getDate("dataOperacao").toLocalDate(),
-                rs.getString("tipoOperacao").charAt(0),
-                quantidade
+                tipo,
+                quantidade,
+                cotacaoNaData
         );
     }
 }

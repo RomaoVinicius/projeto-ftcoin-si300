@@ -1,10 +1,14 @@
 package src.dao.mariadb;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import src.dao.CotacaoDAO;
 import src.model.Cotacao;
+import src.db.DatabaseConnection;
+import src.dao.mariadb.CotacaoMariaDAO;
+
 
 import java.math.BigDecimal;// adicionado para uso de BigDecimal, sugestão do VScode 
 
@@ -26,8 +30,8 @@ public class CotacaoMariaDAO implements CotacaoDAO {
         }
     }
 
-    @Override
-    public Cotacao consultar(int id) {
+    
+    public Cotacao consultar(LocalDate idDate) {
         // Como a tabela usa a data como chave, esta busca por "id" não é aplicável direntamente
         // manti para atender a interface; usar consultarPorData()
         throw new UnsupportedOperationException(
@@ -56,8 +60,8 @@ public class CotacaoMariaDAO implements CotacaoDAO {
         inserir(cotacao); 
     }
 
-    @Override
-    public void excluir(int id) {
+    
+    public void excluir(LocalDate idDate) {
         throw new UnsupportedOperationException(
                 "Exclusão por data não implementada nesta versão.");
     }
@@ -82,6 +86,6 @@ public class CotacaoMariaDAO implements CotacaoDAO {
     private Cotacao mapear(ResultSet rs) throws SQLException {
         BigDecimal valor = rs.getBigDecimal("cotacao");
         java.time.LocalDate data = rs.getDate("dataCotacao").toLocalDate();
-        return new Cotacao(0, data, valor);
+        return new Cotacao(data, valor);
     }
 }

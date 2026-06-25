@@ -16,7 +16,7 @@ public class MovimentacaoDAOMemoria implements MovimentacaoDAO {
     @Override
     public Movimentacao consultar(int id) {
         for (Movimentacao m : bancoDeDados) {
-            if (m.getIdentificador() == id) {
+            if (m.getIdMovimento() == id) {
                 return m;
             }
         }
@@ -26,7 +26,7 @@ public class MovimentacaoDAOMemoria implements MovimentacaoDAO {
     @Override
     public void atualizar(Movimentacao movimentacao) {
         for (int i = 0; i < bancoDeDados.size(); i++) {
-            if (bancoDeDados.get(i).getIdentificador() == movimentacao.getIdentificador()) {
+            if (bancoDeDados.get(i).getIdMovimento() == movimentacao.getIdMovimento()) {
                 bancoDeDados.set(i, movimentacao);
                 return;
             }
@@ -35,7 +35,7 @@ public class MovimentacaoDAOMemoria implements MovimentacaoDAO {
 
     @Override
     public void excluir(int id) {
-        bancoDeDados.removeIf(m -> m.getIdentificador() == id);
+        bancoDeDados.removeIf(m -> m.getIdMovimento() == id);
     }
 
     @Override

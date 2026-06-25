@@ -71,7 +71,7 @@ public class MovimentacaoView {
 
     private void telaListar(int idCarteira) {
         System.out.println("\n--- Movimentações da Carteira ---");
-        List<Movimentacao> lista = controller.listarPorCarteira(idCarteira);
+        List<Movimentacao> lista = controller.listarPorCarteira();
         if (lista.isEmpty()) {
             System.out.println("Nenhuma movimentação encontrada.");
             return;
@@ -88,7 +88,7 @@ public class MovimentacaoView {
     }
 
     private void telaSaldo(int idCarteira) {
-        BigDecimal saldo = controller.calcularSaldo(idCarteira);
+        BigDecimal saldo = controller.calcularSaldo();
         System.out.printf("\nSaldo atual de moedas: %s%n", saldo);
     }
 

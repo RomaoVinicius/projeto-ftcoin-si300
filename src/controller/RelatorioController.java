@@ -3,10 +3,11 @@ import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
+import src.dao.CarteiraDAO;
 import src.dao.MovimentacaoDAO;
 import src.model.Movimentacao;
 import src.model.TipoMovimentacao;
+import src.model.Carteira;
 
 public class RelatorioController {
 

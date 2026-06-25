@@ -2,6 +2,9 @@ package src.dao.mariadb;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import src.model.Carteira;
+import src.dao.CarteiraDAO;
+import src.db.DatabaseConnection;
 
 // implementação de persistência da entidade Carteira em banco MariaD
 public class CarteiraMariaDAO implements CarteiraDAO {

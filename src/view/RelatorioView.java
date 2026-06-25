@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import src.controller.RelatorioController;
+import src.model.Carteira;
 import src.model.Movimentacao;
 
 public class RelatorioView {
