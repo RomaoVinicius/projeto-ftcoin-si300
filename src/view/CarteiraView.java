@@ -1,5 +1,9 @@
+package src.view;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import src.controller.CarteiraController;
+import src.model.Carteira;
 //testando
 public class CarteiraView {
     private final CarteiraController controller;

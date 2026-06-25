@@ -1,3 +1,4 @@
+package src.model;
 
 //testando
 public class Carteira{

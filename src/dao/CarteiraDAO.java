@@ -1,5 +1,8 @@
+package src.dao;
 import java.util.List;
 //testando
+
+import src.model.Carteira;
 
 public interface CarteiraDAO {
     void inserir(Carteira carteira);

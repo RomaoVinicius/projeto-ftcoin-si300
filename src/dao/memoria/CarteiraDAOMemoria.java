@@ -1,6 +1,10 @@
+package src.dao.memoria;
 import java.util.ArrayList;
 import java.util.List;
 //testando
+
+import src.dao.CarteiraDAO;
+import src.model.Carteira;
 
 public class CarteiraDAOMemoria implements CarteiraDAO {
     private final List<Carteira> bancoDeDados = new ArrayList<>();
