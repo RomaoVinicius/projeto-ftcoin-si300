@@ -1,4 +1,8 @@
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.util.Random;
 import java.util.Scanner;
 
 import src.controller.AjudaController;
@@ -8,9 +12,11 @@ import src.controller.RelatorioController;
 import src.dao.CarteiraDAO;
 import src.dao.CotacaoDAO;
 import src.dao.MovimentacaoDAO;
+import src.dao.mariadb.CotacaoMariaDAO;
 import src.dao.memoria.CarteiraDAOMemoria;
 import src.dao.memoria.CotacaoDAOMemoria;
 import src.dao.memoria.MovimentacaoDAOMemoria;
+import src.model.Cotacao;
 import src.view.CarteiraView;
 import src.view.MovimentacaoView;
 import src.view.RelatorioView;
@@ -18,6 +24,34 @@ import src.view.RelatorioView;
 public class MainAppView {
 
     public static void main(String[] args) {
+        
+        // Pré-popular cotações
+        CotacaoDAO cotacaoDAO = new CotacaoMariaDAO();
+
+        LocalDate data = LocalDate.of(2026, 1, 1);
+        LocalDate fim = LocalDate.of(2026, 12, 31);
+
+        Random random = new Random();
+
+        // Cotação inicial
+        BigDecimal valor = new BigDecimal("350.00");
+
+        for (LocalDate d = data; !d.isAfter(fim); d = d.plusDays(1)) {
+
+            // Variação diária entre -3% e +3%
+            double variacao = (random.nextDouble() * 0.06) - 0.03;
+
+            valor = valor.multiply(BigDecimal.valueOf(1 + variacao))
+                        .setScale(2, RoundingMode.HALF_UP);
+
+            // Evita valores muito baixos
+            if (valor.compareTo(new BigDecimal("150.00")) < 0) {
+                valor = new BigDecimal("150.00");
+            }
+
+            cotacaoDAO.inserir(new Cotacao(d, valor));
+        }
+
         MainAppView menuPrincipal = new MainAppView();
         menuPrincipal.exibirMenuPrincipal();
     }
