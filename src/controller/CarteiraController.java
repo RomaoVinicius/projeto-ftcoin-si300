@@ -1,6 +1,8 @@
 package src.controller;
 //testando
 
+import java.util.List;
+
 import src.dao.CarteiraDAO;
 import src.model.Carteira;
 
@@ -46,5 +48,9 @@ public class CarteiraController {
     public void excluirCarteira(int id) {
         consultarCarteira(id); 
         dao.excluir(id);
+    }
+
+    public List<Carteira> listarTodas(){
+        return dao.listarTodas();
     }
 }

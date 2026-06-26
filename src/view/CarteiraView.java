@@ -24,28 +24,30 @@ public class CarteiraView {
             System.out.println("2. Consultar carteira");
             System.out.println("3. Editar carteira");
             System.out.println("4. Excluir carteira");
+            System.out.println("5. Listar todas as carteiras");
             System.out.println("0. Voltar");
             System.out.println("\n=======================================");
             System.out.print("Escolha uma opção: ");
 
             try {
-                opcao = scanner.nextInt();
-                scanner.nextLine();
+            opcao = scanner.nextInt();
+            scanner.nextLine();
 
-                switch (opcao) {
-                    case 1 -> incluir();
-                    case 2 -> consultar();
-                    case 3 -> editar();
-                    case 4 -> excluir();
-                    case 0 -> System.out.println("Saindo do menu de carteira...");
-                    default -> System.out.println("Opção inválida! Tente novamente.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Erro: Por favor, digite apenas números.");
-                scanner.nextLine();
+            switch (opcao) {
+                case 1 -> incluir();
+                case 2 -> consultar();
+                case 3 -> editar();
+                case 4 -> excluir();
+                case 5 -> listarTodas();
+                case 0 -> System.out.println("Saindo do menu de carteira...");
+                default -> System.out.println("Opção inválida! Tente novamente.");
             }
-        } while (opcao != 0);
-    }
+
+            }catch (InputMismatchException e) {
+                System.out.println("Erro: Por favor, digite apenas números.");
+                scanner.nextLine();}
+            } while (opcao != 0);
+            }
 
     private void incluir() {
         try {
@@ -109,5 +111,25 @@ public class CarteiraView {
         } catch (IllegalArgumentException e) {
             System.out.println("[ERRO] " + e.getMessage());
         }
+    }
+
+        private void listarTodas() {
+        var carteiras = controller.listarTodas();
+
+        if (carteiras.isEmpty()) {
+            System.out.println("Nenhuma carteira cadastrada.");
+            return;
+        }
+
+        System.out.println("\n========== CARTEIRAS ==========");
+
+        for (Carteira carteira : carteiras) {
+            System.out.println("--------------------------------");
+            System.out.println("ID: " + carteira.getIdentificador());
+            System.out.println("Titular: " + carteira.getNomeTitular());
+            System.out.println("Corretora: " + carteira.getCorretora());
+        }
+
+        System.out.println("--------------------------------");
     }
 }
