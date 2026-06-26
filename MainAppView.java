@@ -8,6 +8,7 @@ import java.util.Scanner;
 import src.controller.AjudaController;
 import src.controller.CarteiraController;
 import src.controller.MovimentacaoController;
+import src.controller.OraculoController;
 import src.controller.RelatorioController;
 import src.dao.CarteiraDAO;
 import src.dao.CotacaoDAO;
@@ -18,6 +19,7 @@ import src.dao.mariadb.MovimentacaoMariaDAO;
 import src.model.Cotacao;
 import src.view.CarteiraView;
 import src.view.MovimentacaoView;
+import src.view.OraculoView;
 import src.view.RelatorioView;
 
 public class MainAppView {
@@ -59,7 +61,9 @@ public class MainAppView {
         Scanner scanner = new Scanner(System.in);
         CarteiraDAO carteiraDAO = new CarteiraMariaDAO();
         CotacaoDAO cotacaoDAO = new CotacaoMariaDAO();
-         MovimentacaoDAO movimentacaoDAO = new MovimentacaoMariaDAO();
+        MovimentacaoDAO movimentacaoDAO = new MovimentacaoMariaDAO();
+        OraculoController oraculoController = new OraculoController(cotacaoDAO);
+        OraculoView oraculoView = new OraculoView(oraculoController, scanner);
         int opcao = -1;
 
         do {
@@ -69,7 +73,8 @@ public class MainAppView {
             System.out.println("1. Acessar Carteira");
             System.out.println("2. Movimentações");
             System.out.println("3. Emitir Relatórios");
-            System.out.println("4. Ajuda");
+            System.out.println("4. Consultar Cotação (Oraculo)");
+            System.out.println("5. Ajuda");
             System.out.println("0. Sair do Programa");
             System.out.println("=======================================");
             System.out.print("Escolha uma opção: ");
@@ -110,6 +115,9 @@ public class MainAppView {
                     break;
 
                 case 4:
+                    oraculoView.consultarCotacao();
+                    break;
+                case 5:
                     AjudaController ajudaController = new AjudaController();
                     ajudaController.iniciar(); 
                     break;
