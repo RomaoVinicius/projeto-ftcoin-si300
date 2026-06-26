@@ -8,7 +8,6 @@ import src.model.Movimentacao;
 import src.model.TipoMovimentacao;
 import src.db.DatabaseConnection;
 
-import java.math.BigDecimal;// adicionado para uso de BigDecimal, sugestão do VScode 
 
 // implementação de persistência da entidade Movimentacao em banco MariaDB
 public class MovimentacaoMariaDAO implements MovimentacaoDAO {

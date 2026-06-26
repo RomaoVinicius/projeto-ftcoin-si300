@@ -80,7 +80,7 @@ public class MovimentacaoView {
             return;
         }
         for (Movimentacao m : lista) {
-            System.out.printf("ID: %d | %s | %s | Qtd: %s | Cotação: %s | Total: %s%n",
+            System.out.printf("ID: %d | %s | %s | Qtd: %.0f moeda(s) | Cotação: %.2f | Total: %.2f%n",
                     m.getIdMovimento(),
                     m.getDataOperacao().format(FORMATO_DATA),
                     m.getTipoMovimentacao().getCodigo() == 'C' ? "COMPRA" : "VENDA",
@@ -92,7 +92,7 @@ public class MovimentacaoView {
 
     private void telaSaldo(int idCarteira) {
         BigDecimal saldo = controller.calcularSaldo(idCarteira);
-        System.out.printf("\nSaldo atual de moedas: %s%n", saldo);
+        System.out.printf("\nSaldo atual de moedas: %.0f%n", saldo);
     }
 
     // --- Helpers de leitura ---

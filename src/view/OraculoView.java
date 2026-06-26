@@ -37,9 +37,9 @@ public class OraculoView {
             }
 
             System.out.println();
-            System.out.println("========== ORÁCULO ==========");
+            System.out.println("\n========== ORÁCULO ==========");
             System.out.println("Data: " + data.format(FORMATO));
-            System.out.println("Cotação: R$ " + cotacao.getValor());
+            System.out.println(String.format("Cotação: R$ %.2f", cotacao.getValor()));
             System.out.println("=============================");
 
         } catch (DateTimeParseException e) {

@@ -49,7 +49,7 @@ public class RelatorioView {
                     case 3 -> {
                         System.out.print("Digite o ID da carteira: ");
                         int id = scanner.nextInt();
-                        System.out.println("Saldo de moedas: " + controller.calcularSaldoAtual(id));
+                        System.out.println(String.format("Saldo de moedas: %.0f", controller.calcularSaldoAtual(id)));
                     }
                     case 4 -> {
                         System.out.print("Digite o ID da carteira: ");
@@ -67,7 +67,7 @@ public class RelatorioView {
                         for (Carteira c : controller.listarOrdenadasPorId()) {
                             BigDecimal resultado = controller.calcularGanhoOuPerda(c.getIdentificador());
                             String status = resultado.compareTo(BigDecimal.ZERO) >= 0 ? "[LUCRO]" : "[PREJUÍZO]";
-                            System.out.printf("ID %d | Titular: %s | Balanço: R$ %s %s\n", 
+                            System.out.printf("ID %d | Titular: %s | Balanço: R$ %.2f %s\n", 
                                 c.getIdentificador(), c.getNomeTitular(), resultado, status);
                         }
                     }

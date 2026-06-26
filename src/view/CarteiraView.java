@@ -30,7 +30,7 @@ public class CarteiraView {
             System.out.println("4. Excluir carteira");
             System.out.println("5. Listar todas as carteiras");
             System.out.println("0. Voltar");
-            System.out.println("=======================================");
+            System.out.println("\n=======================================");
             System.out.print("Escolha uma opção: ");
 
             try {
@@ -92,7 +92,7 @@ public class CarteiraView {
             System.out.println("ID: " + carteira.getIdentificador());
             System.out.println("Titular: " + carteira.getNomeTitular());
             System.out.println("Corretora: " + carteira.getCorretora());
-            System.out.println("Saldo: R$ " + carteira.getSaldoFinanceiro());
+            System.out.println(String.format("Saldo: R$ %.2f", carteira.getSaldoFinanceiro()));
 
         } catch (IllegalArgumentException e) {
             System.out.println("[ERRO] " + e.getMessage());
@@ -150,7 +150,7 @@ public class CarteiraView {
             System.out.println("ID: " + carteira.getIdentificador());
             System.out.println("Titular: " + carteira.getNomeTitular());
             System.out.println("Corretora: " + carteira.getCorretora());
-            System.out.println("Saldo: R$ " + carteira.getSaldoFinanceiro());
+            System.out.println(String.format("Saldo: R$ %.2f", carteira.getSaldoFinanceiro()));
         }
 
         System.out.println("--------------------------------");
