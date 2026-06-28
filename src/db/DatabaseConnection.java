@@ -6,9 +6,9 @@ import java.sql.SQLException;
 // Gerencia a conexão única (Singleton) com o banco de dados MariaDB.
 public final class DatabaseConnection {
 
-    private static final String URL = "jdbc:mariadb://localhost:3306/ftcoin";
-    private static final String USUARIO = "root";
-    private static final String SENHA = "";
+    private static final String URL = "jdbc:mariadb://143.106.243.64:3306/PooI_1s26_B01?useUnicode=true&characterEncoding=utf8&connectionCollation=utf8mb4_unicode_ci";
+    private static final String USUARIO = "PooI_1s26_B01";
+    private static final String SENHA = "3xbHq8fBGM";
 
     private static DatabaseConnection instancia;
     private Connection conexao;
