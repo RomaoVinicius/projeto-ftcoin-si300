@@ -1,9 +1,6 @@
 package src.controller;
 //testando
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import src.dao.CarteiraDAO;
 import src.model.Carteira;
 
@@ -14,7 +11,7 @@ public class CarteiraController {
         this.dao = dao;
     }
 
-    public void incluirCarteira(int id, String nome, String corretora, BigDecimal saldoFinanceiro) {
+    public void incluirCarteira(int id, String nome, String corretora) {
         if (dao.consultar(id) != null) {
             throw new IllegalArgumentException("Já existe uma carteira com o ID " + id);
         }
@@ -22,7 +19,7 @@ public class CarteiraController {
             throw new IllegalArgumentException("O nome do titular e a corretora não podem ficar em branco.");
         }
         
-        Carteira novaCarteira = new Carteira(id, nome, corretora,saldoFinanceiro);
+        Carteira novaCarteira = new Carteira(id, nome, corretora);
         dao.inserir(novaCarteira);
     }
 
@@ -49,9 +46,5 @@ public class CarteiraController {
     public void excluirCarteira(int id) {
         consultarCarteira(id); 
         dao.excluir(id);
-    }
-
-    public List<Carteira> listarTodas(){
-        return dao.listarTodas();
     }
 }

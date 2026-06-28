@@ -51,7 +51,7 @@ public class Movimentacao {
 
     @Override
     public String toString() {
-        return String.format("Movimentacao{id=%d, carteira=%d, data=%s, tipo=%s, qtd=%.0f, cotacao=%.2f}",
+        return String.format("Movimentacao{id=%d, carteira=%d, data=%s, tipo=%s, qtd=%s, cotacao=%s}",
                 idMovimento, idCarteira, dataOperacao, tipoMovimentacao, quantidade, cotacaoNaData);
     }
 }

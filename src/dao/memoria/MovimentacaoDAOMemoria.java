@@ -42,17 +42,4 @@ public class MovimentacaoDAOMemoria implements MovimentacaoDAO {
     public List<Movimentacao> listarTodas() {
         return new ArrayList<>(bancoDeDados);
     }
-
-    @Override
-    public List<Movimentacao> listarPorCarteira(int idCarteira) {
-        List<Movimentacao> lista = new ArrayList<>();
-
-        for (Movimentacao m : bancoDeDados) {
-            if (m.getIdCarteira() == idCarteira) {
-                lista.add(m);
-            }
-        }
-
-        return lista;
-    }
 }

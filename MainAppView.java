@@ -1,69 +1,32 @@
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.util.Random;
 import java.util.Scanner;
 
 import src.controller.AjudaController;
 import src.controller.CarteiraController;
 import src.controller.MovimentacaoController;
-import src.controller.OraculoController;
 import src.controller.RelatorioController;
 import src.dao.CarteiraDAO;
 import src.dao.CotacaoDAO;
 import src.dao.MovimentacaoDAO;
-import src.dao.mariadb.CarteiraMariaDAO;
-import src.dao.mariadb.CotacaoMariaDAO;
-import src.dao.mariadb.MovimentacaoMariaDAO;
-import src.model.Cotacao;
+import src.dao.memoria.CarteiraDAOMemoria;
+import src.dao.memoria.CotacaoDAOMemoria;
+import src.dao.memoria.MovimentacaoDAOMemoria;
 import src.view.CarteiraView;
 import src.view.MovimentacaoView;
-import src.view.OraculoView;
 import src.view.RelatorioView;
 
 public class MainAppView {
 
     public static void main(String[] args) {
-        
-        // Pré-popular cotações
-        CotacaoDAO cotacaoDAO = new CotacaoMariaDAO();
-
-        LocalDate data = LocalDate.of(2026, 1, 1);
-        LocalDate fim = LocalDate.of(2026, 12, 31);
-
-        Random random = new Random();
-
-        // Cotação inicial
-        BigDecimal valor = new BigDecimal("350.00");
-
-        for (LocalDate d = data; !d.isAfter(fim); d = d.plusDays(1)) {
-
-            // Variação diária entre -3% e +3%
-            double variacao = (random.nextDouble() * 0.06) - 0.03;
-
-            valor = valor.multiply(BigDecimal.valueOf(1 + variacao))
-                        .setScale(2, RoundingMode.HALF_UP);
-
-            // Evita valores muito baixos
-            if (valor.compareTo(new BigDecimal("150.00")) < 0) {
-                valor = new BigDecimal("150.00");
-            }
-
-            cotacaoDAO.inserir(new Cotacao(d, valor));
-        }
-
         MainAppView menuPrincipal = new MainAppView();
         menuPrincipal.exibirMenuPrincipal();
     }
 
     public void exibirMenuPrincipal() {
         Scanner scanner = new Scanner(System.in);
-        CarteiraDAO carteiraDAO = new CarteiraMariaDAO();
-        CotacaoDAO cotacaoDAO = new CotacaoMariaDAO();
-        MovimentacaoDAO movimentacaoDAO = new MovimentacaoMariaDAO();
-        OraculoController oraculoController = new OraculoController(cotacaoDAO);
-        OraculoView oraculoView = new OraculoView(oraculoController, scanner);
+        CarteiraDAO carteiraDAO = new CarteiraDAOMemoria();
+        CotacaoDAO cotacaoDAO = new CotacaoDAOMemoria();
+        MovimentacaoDAO movimentacaoDAO = new MovimentacaoDAOMemoria();
         int opcao = -1;
 
         do {
@@ -73,8 +36,7 @@ public class MainAppView {
             System.out.println("1. Acessar Carteira");
             System.out.println("2. Movimentações");
             System.out.println("3. Emitir Relatórios");
-            System.out.println("4. Consultar Cotação (Oraculo)");
-            System.out.println("5. Ajuda");
+            System.out.println("4. Ajuda");
             System.out.println("0. Sair do Programa");
             System.out.println("=======================================");
             System.out.print("Escolha uma opção: ");
@@ -103,7 +65,7 @@ public class MainAppView {
                     int id = scanner.nextInt();
                     scanner.nextLine(); // Limpa o buffer
 
-                    MovimentacaoController movimentacaoController =  new MovimentacaoController(movimentacaoDAO,cotacaoDAO,carteiraDAO);
+                    MovimentacaoController movimentacaoController = new MovimentacaoController(movimentacaoDAO, cotacaoDAO); 
                     MovimentacaoView movimentacao = new MovimentacaoView(movimentacaoController, scanner);
                     movimentacao.exibirMenu(id);
                     break;
@@ -115,9 +77,6 @@ public class MainAppView {
                     break;
 
                 case 4:
-                    oraculoView.consultarCotacao();
-                    break;
-                case 5:
                     AjudaController ajudaController = new AjudaController();
                     ajudaController.iniciar(); 
                     break;

@@ -31,28 +31,29 @@ public class CotacaoMariaDAO implements CotacaoDAO {
     }
 
     
-        @Override
-        public Cotacao consultar(LocalDate data) {
-            String sql = "SELECT * FROM Oraculo WHERE dataCotacao = ?";
+    public Cotacao consultar(LocalDate idDate) {
+        // Como a tabela usa a data como chave, esta busca por "id" não é aplicável direntamente
+        // manti para atender a interface; usar consultarPorData()
+        throw new UnsupportedOperationException(
+                "Use consultarPorData(LocalDate) para a implementação SQL.");
+    }
 
-            try (PreparedStatement ps = DatabaseConnection.getInstancia()
-                    .getConexao().prepareStatement(sql)) {
+    public Cotacao consultarPorData(java.time.LocalDate data) {
+        String sql = "SELECT * FROM Oraculo WHERE dataCotacao = ?";
+        try (PreparedStatement ps = DatabaseConnection.getInstancia()
+                .getConexao().prepareStatement(sql)) {
 
-                ps.setDate(1, Date.valueOf(data));
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        return mapear(rs);
-                    }
+            ps.setDate(1, Date.valueOf(data));
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapear(rs);
                 }
-
-            } catch (SQLException e) {
-                System.err.println("Erro ao consultar cotação: " + e.getMessage());
             }
-
-            return null;
+        } catch (SQLException e) {
+            System.err.println("Erro ao consultar cotação: " + e.getMessage());
         }
-
+        return null;
+    }
 
     @Override
     public void atualizar(Cotacao cotacao) {

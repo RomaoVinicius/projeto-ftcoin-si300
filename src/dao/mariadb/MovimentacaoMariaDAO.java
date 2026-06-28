@@ -8,22 +8,21 @@ import src.model.Movimentacao;
 import src.model.TipoMovimentacao;
 import src.db.DatabaseConnection;
 
+import java.math.BigDecimal;// adicionado para uso de BigDecimal, sugestão do VScode 
 
 // implementação de persistência da entidade Movimentacao em banco MariaDB
 public class MovimentacaoMariaDAO implements MovimentacaoDAO {
 
     @Override
     public void inserir(Movimentacao movimentacao) {
-        String sql = "INSERT INTO Movimentacao(idCarteira, dataOperacao, tipoOperacao, quantidade, cotacaoNaData, valorFinanceiro)VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Movimentacao (idCarteira, dataOperacao, tipoOperacao, quantidade) " + "VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setInt(1, movimentacao.getIdCarteira());
             ps.setDate(2, Date.valueOf(movimentacao.getDataOperacao()));
-            ps.setString(3, String.valueOf(movimentacao.getTipoMovimentacao().getCodigo()));
+            ps.setString(3, String.valueOf(movimentacao.getTipoMovimentacao()));
             ps.setBigDecimal(4, movimentacao.getQuantidade());
-            ps.setBigDecimal(5, movimentacao.getCotacaoNaData());
-            ps.setBigDecimal(6, movimentacao.getValorFinanceiro());
             ps.executeUpdate();
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -119,22 +118,17 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
         return lista;
     }
 
-            private Movimentacao mapear(ResultSet rs) throws SQLException {
-            char codigo = rs.getString("tipoOperacao").charAt(0);
-            TipoMovimentacao tipo;
-            if (codigo == 'C') {
-                tipo = TipoMovimentacao.COMPRA;
-            } else {
-                tipo = TipoMovimentacao.VENDA;
-            }
-
-            return new Movimentacao(
-                    rs.getInt("identificador"),
-                    rs.getInt("idCarteira"),
-                    rs.getDate("dataOperacao").toLocalDate(),
-                    tipo,
-                    rs.getBigDecimal("quantidade"),
-                    rs.getBigDecimal("cotacaoNaData")
-            );
-        }
+    private Movimentacao mapear(ResultSet rs) throws SQLException {
+        BigDecimal quantidade = rs.getBigDecimal("quantidade");
+        BigDecimal cotacaoNaData = rs.getBigDecimal("cotacaoNaData");
+        TipoMovimentacao tipo = TipoMovimentacao.valueOf(rs.getString("TipoOpercao"));
+        return new Movimentacao(
+                rs.getInt("idMovimento"),
+                rs.getInt("idCarteira"),
+                rs.getDate("dataOperacao").toLocalDate(),
+                tipo,
+                quantidade,
+                cotacaoNaData
+        );
+    }
 }
