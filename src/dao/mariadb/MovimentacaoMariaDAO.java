@@ -1,15 +1,14 @@
 package src.dao.mariadb;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import src.dao.MovimentacaoDAO;
+import src.db.DatabaseConnection;
 import src.model.Movimentacao;
 import src.model.TipoMovimentacao;
-import src.db.DatabaseConnection;
-
-import java.math.BigDecimal;// adicionado para uso de BigDecimal, sugestão do VScode 
 
 // implementação de persistência da entidade Movimentacao em banco MariaDB
 public class MovimentacaoMariaDAO implements MovimentacaoDAO {
@@ -140,18 +139,55 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
         if (data == null) {
             return null;
         }
-
-        String sql = "SELECT Cotacao FROM ORACULO WHERE Data = ?";
-        try (PreparedStatement ps = DatabaseConnection.getInstancia().getConexao().prepareStatement(sql)) {
-            ps.setDate(1, Date.valueOf(data));
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getBigDecimal("Cotacao");
+        try {
+            String tableName = resolveTableName();
+            String dateColumn = resolveColumnName(tableName, "Data", "data", "dataCotacao");
+            String valueColumn = resolveColumnName(tableName, "Cotacao", "cotacao");
+            String sql = "SELECT " + valueColumn + " FROM " + tableName + " WHERE " + dateColumn + " = ?";
+            try (PreparedStatement ps = DatabaseConnection.getInstancia().getConexao().prepareStatement(sql)) {
+                ps.setDate(1, Date.valueOf(data));
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getBigDecimal(valueColumn);
+                    }
                 }
             }
         } catch (SQLException e) {
             return null;
         }
         return null;
+    }
+
+    private String resolveTableName() throws SQLException {
+        DatabaseMetaData meta = DatabaseConnection.getInstancia().getConexao().getMetaData();
+        try (ResultSet rs = meta.getTables(null, null, "ORACULO", null)) {
+            if (rs.next()) {
+                return "ORACULO";
+            }
+        }
+        try (ResultSet rs = meta.getTables(null, null, "ORACULAO", null)) {
+            if (rs.next()) {
+                return "ORACULAO";
+            }
+        }
+        try (Statement st = DatabaseConnection.getInstancia().getConexao().createStatement()) {
+            st.execute("CREATE TABLE IF NOT EXISTS ORACULO (Data DATE NOT NULL, Cotacao DECIMAL(6,2) NOT NULL, PRIMARY KEY (Data))");
+        }
+        return "ORACULO";
+    }
+
+    private String resolveColumnName(String tableName, String... candidates) throws SQLException {
+        DatabaseMetaData meta = DatabaseConnection.getInstancia().getConexao().getMetaData();
+        try (ResultSet rs = meta.getColumns(null, null, tableName, null)) {
+            while (rs.next()) {
+                String columnName = rs.getString("COLUMN_NAME");
+                for (String candidate : candidates) {
+                    if (candidate.equalsIgnoreCase(columnName)) {
+                        return columnName;
+                    }
+                }
+            }
+        }
+        return candidates[0];
     }
 }
