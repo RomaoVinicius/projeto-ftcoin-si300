@@ -15,7 +15,7 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
 
     @Override
     public void inserir(Movimentacao movimentacao) {
-        String sql = "INSERT INTO Movimentacao (idCarteira, dataOperacao, tipoOperacao, quantidade) " + "VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO MOVIMENTACAO (idCarteira, dataOperacao, tipoOperacao, quantidade) " + "VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -37,7 +37,7 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
 
     @Override
     public Movimentacao consultar(int idMovimento) {
-        String sql = "SELECT * FROM Movimentacao WHERE idMovimento = ?";
+        String sql = "SELECT * FROM MOVIMENTACAO WHERE idMovimento = ?";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -55,14 +55,15 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
 
     @Override
     public void atualizar(Movimentacao movimentacao) {
-        String sql = "UPDATE Movimentacao SET dataOperacao = ?, tipoOperacao = ?, quantidade = ? " + "WHERE idMovimento = ?";
+        String sql = "UPDATE MOVIMENTACAO SET dataOperacao = ?, tipoOperacao = ?, quantidade = ? " + "WHERE idMovimento = ?";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
             ps.setDate(1, Date.valueOf(movimentacao.getDataOperacao()));
-            ps.setString(2, String.valueOf(movimentacao.getTipoMovimentacao()));
-            ps.setBigDecimal(3, movimentacao.getQuantidade());
-            ps.setInt(4, movimentacao.getIdMovimento());
+            ps.setString(2, String.valueOf(tipoOperacao.COMPRA.getCodigo()));//'C'
+            ps.setString(3, String.valueOf(tipoOperacao.VENDA.getCodigo()));// 'V'
+            ps.setBigDecimal(4, movimentacao.getQuantidade());
+            ps.setInt(5, movimentacao.getIdMovimento());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Erro ao atualizar movimentação: " + e.getMessage());
@@ -71,7 +72,7 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
 
     @Override
     public void excluir(int idMovimento) {
-        String sql = "DELETE FROM Movimentacao WHERE idMovimento = ?";
+        String sql = "DELETE FROM MOVIMENTACAO WHERE idMovimento = ?";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -85,7 +86,7 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
     @Override
     public List<Movimentacao> listarTodas() {
         List<Movimentacao> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Movimentacao";
+        String sql = "SELECT * FROM MOVIMENTACAO";
         try (Statement st = DatabaseConnection.getInstancia()
                 .getConexao().createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -102,7 +103,7 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
     
     public List<Movimentacao> listarPorCarteira(int idCarteira) {
         List<Movimentacao> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Movimentacao WHERE idCarteira = ? ORDER BY dataOperacao";
+        String sql = "SELECT * FROM MOVIMENTACAO WHERE idCarteira = ? ORDER BY dataOperacao";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 

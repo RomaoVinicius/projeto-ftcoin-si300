@@ -11,7 +11,7 @@ public class CarteiraMariaDAO implements CarteiraDAO {
 
     @Override
     public void inserir(Carteira carteira) {
-        String sql = "INSERT INTO Carteira (identificador, nomeTitular, corretora) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO CARTEIRA (identificador, nomeTitular, corretora) VALUES (?, ?, ?)";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -26,7 +26,7 @@ public class CarteiraMariaDAO implements CarteiraDAO {
 
     @Override
     public Carteira consultar(int identificador) {
-        String sql = "SELECT * FROM Carteira WHERE identificador = ?";
+        String sql = "SELECT * FROM CARTEIRA WHERE identificador = ?";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -44,7 +44,7 @@ public class CarteiraMariaDAO implements CarteiraDAO {
 
     @Override
     public void atualizar(Carteira carteira) {
-        String sql = "UPDATE Carteira SET nomeTitular = ?, corretora = ? WHERE identificador = ?";
+        String sql = "UPDATE CARTEIRA SET nomeTitular = ?, corretora = ? WHERE identificador = ?";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -59,7 +59,7 @@ public class CarteiraMariaDAO implements CarteiraDAO {
 
     @Override
     public void excluir(int identificador) {
-        String sql = "DELETE FROM Carteira WHERE identificador = ?";
+        String sql = "DELETE FROM CARTEIRA WHERE identificador = ?";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -73,7 +73,7 @@ public class CarteiraMariaDAO implements CarteiraDAO {
     @Override
     public List<Carteira> listarTodas() {
         List<Carteira> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Carteira";
+        String sql = "SELECT * FROM CRTEIRA";
         try (Statement st = DatabaseConnection.getInstancia()
                 .getConexao().createStatement();
              ResultSet rs = st.executeQuery(sql)) {

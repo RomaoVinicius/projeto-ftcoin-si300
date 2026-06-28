@@ -1,5 +1,4 @@
-package src.db;
-
+//package ftcoin.dao.sql;(o projeto não usa pacotes, e esse package quebrava todos os import dos outros arquivos)
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -7,7 +6,7 @@ import java.sql.SQLException;
 // Gerencia a conexão única (Singleton) com o banco de dados MariaDB.
 public final class DatabaseConnection {
 
-    private static final String URL = "jdbc:mariadb://localhost:projeto-ftcoin-si300";
+    private static final String URL = "jdbc:mariadb://localhost:3306/ftcoin";//mudei o formato para porta/banco
     private static final String USUARIO = "root";
     private static final String SENHA = "senha";
 
