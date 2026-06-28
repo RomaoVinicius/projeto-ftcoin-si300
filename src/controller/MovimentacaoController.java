@@ -40,7 +40,7 @@ public class MovimentacaoController {
 
     // Registra uma VENDA (valida saldo antes)
     public boolean registrarVenda(int idCarteira, LocalDate data, BigDecimal quantidade) {
-        BigDecimal saldo = calcularSaldo();
+        BigDecimal saldo = calcularSaldo(idCarteira);
         if (quantidade.compareTo(saldo) > 0) {
             System.out.println("Erro: saldo insuficiente. Saldo atual: " + saldo);
             return false;
@@ -64,8 +64,8 @@ public class MovimentacaoController {
     }
 
     // Calcula o saldo de moedas da carteira (compras - vendas)
-    public BigDecimal calcularSaldo() {
-        List<Movimentacao> lista = movimentacaoDAO.listarTodas();
+    public BigDecimal calcularSaldo(int idCarteira) {
+        List<Movimentacao> lista = movimentacaoDAO.listarPorCarteira(idCarteira);
         BigDecimal saldo = BigDecimal.ZERO;
         for (Movimentacao m : lista) {
             if (m.getTipoMovimentacao() == TipoMovimentacao.COMPRA) {
@@ -78,8 +78,8 @@ public class MovimentacaoController {
     }
 
     // Lista todas as movimentações de uma carteira
-    public List<Movimentacao> listarPorCarteira() {
-        return movimentacaoDAO.listarTodas();
+    public List<Movimentacao> listarPorCarteira(int idCarteira) {
+        return movimentacaoDAO.listarPorCarteira(idCarteira);
     }
 
     // Lista todas as movimentações

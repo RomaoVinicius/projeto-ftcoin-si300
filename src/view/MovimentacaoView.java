@@ -41,7 +41,7 @@ public class MovimentacaoView {
                 case 3 -> telaListar(idCarteira);
                 case 4 -> telaSaldo(idCarteira);
                 case 0 -> System.out.println("Voltando...");
-                default -> System.out.println("Opção inválida.");
+                default -> System.out.println(ConsoleColors.colorize("Opção inválida.", ConsoleColors.RED));
             }
         }
     }
@@ -74,7 +74,7 @@ public class MovimentacaoView {
 
     private void telaListar(int idCarteira) {
         System.out.println("\n-----| Movimentações da Carteira |-----");
-        List<Movimentacao> lista = controller.listarPorCarteira();
+        List<Movimentacao> lista = controller.listarPorCarteira(idCarteira);
         if (lista.isEmpty()) {
             System.out.println("Nenhuma movimentação encontrada.");
             return;
@@ -91,18 +91,25 @@ public class MovimentacaoView {
     }
 
     private void telaSaldo(int idCarteira) {
-        BigDecimal saldo = controller.calcularSaldo();
-        System.out.printf("\nSaldo atual de moedas: %s%n", saldo);
+        BigDecimal saldo = controller.calcularSaldo(idCarteira);
+        System.out.printf("\nSaldo atual de moedas: %s%n", formatarValor(saldo));
     }
 
     // --- Helpers de leitura ---
+
+    private String formatarValor(BigDecimal valor) {
+        if (valor == null) {
+            return "0";
+        }
+        return valor.stripTrailingZeros().toPlainString();
+    }
 
     private LocalDate lerData() {
         System.out.print("Data (dd/MM/yyyy): ");
         try {
             return LocalDate.parse(scanner.nextLine().trim(), FORMATO_DATA);
         } catch (DateTimeParseException e) {
-            System.out.println("Data inválida.");
+            System.out.println(ConsoleColors.colorize("Data inválida.", ConsoleColors.RED));
             return null;
         }
     }
@@ -112,7 +119,7 @@ public class MovimentacaoView {
         try {
             return new BigDecimal(scanner.nextLine().trim().replace(",", "."));
         } catch (NumberFormatException e) {
-            System.out.println("Valor inválido.");
+            System.out.println(ConsoleColors.colorize("Valor inválido.", ConsoleColors.RED));
             return null;
         }
     }

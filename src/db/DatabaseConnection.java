@@ -3,13 +3,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-
 // Gerencia a conexão única (Singleton) com o banco de dados MariaDB.
 public final class DatabaseConnection {
 
-    private static final String URL = "jdbc:mariadb://localhost:3306/ftcoin";//mudei o formato para porta/banco
+    private static final String URL = "jdbc:mariadb://localhost:3306/ftcoin";
     private static final String USUARIO = "root";
-    private static final String SENHA = "senha";
+    private static final String SENHA = "";
 
     private static DatabaseConnection instancia;
     private Connection conexao;

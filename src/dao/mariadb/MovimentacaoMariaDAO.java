@@ -1,5 +1,6 @@
 package src.dao.mariadb;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,13 +16,14 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
 
     @Override
     public void inserir(Movimentacao movimentacao) {
-        String sql = "INSERT INTO MOVIMENTACAO (idCarteira, dataOperacao, tipoOperacao, quantidade) " + "VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO MOVIMENTACAO (IdCarteira, Data, TipoOperacao, Quantidade) VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
+            movimentacao.setCotacaoNaData(buscarCotacaoPorData(movimentacao.getDataOperacao()));
             ps.setInt(1, movimentacao.getIdCarteira());
             ps.setDate(2, Date.valueOf(movimentacao.getDataOperacao()));
-            ps.setString(3, String.valueOf(movimentacao.getTipoMovimentacao()));
+            ps.setString(3, String.valueOf(movimentacao.getTipoMovimentacao().getCodigo()));
             ps.setBigDecimal(4, movimentacao.getQuantidade());
             ps.executeUpdate();
 
@@ -37,7 +39,7 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
 
     @Override
     public Movimentacao consultar(int idMovimento) {
-        String sql = "SELECT * FROM MOVIMENTACAO WHERE idMovimento = ?";
+        String sql = "SELECT * FROM MOVIMENTACAO WHERE IdMovimento = ?";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -55,7 +57,7 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
 
     @Override
     public void atualizar(Movimentacao movimentacao) {
-        String sql = "UPDATE MOVIMENTACAO SET dataOperacao = ?, tipoOperacao = ?, quantidade = ? WHERE idMovimento = ?";
+        String sql = "UPDATE MOVIMENTACAO SET Data = ?, TipoOperacao = ?, Quantidade = ? WHERE IdMovimento = ?";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -71,7 +73,7 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
 
     @Override
     public void excluir(int idMovimento) {
-        String sql = "DELETE FROM MOVIMENTACAO WHERE idMovimento = ?";
+        String sql = "DELETE FROM MOVIMENTACAO WHERE IdMovimento = ?";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -99,10 +101,10 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
         return lista;
     }
 
-    
+    @Override
     public List<Movimentacao> listarPorCarteira(int idCarteira) {
         List<Movimentacao> lista = new ArrayList<>();
-        String sql = "SELECT * FROM MOVIMENTACAO WHERE idCarteira = ? ORDER BY dataOperacao";
+        String sql = "SELECT * FROM MOVIMENTACAO WHERE IdCarteira = ? ORDER BY Data";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -119,16 +121,37 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
     }
 
     private Movimentacao mapear(ResultSet rs) throws SQLException {
-        BigDecimal quantidade = rs.getBigDecimal("quantidade");
-        BigDecimal cotacaoNaData = rs.getBigDecimal("cotacaoNaData");
-        TipoMovimentacao tipo = TipoMovimentacao.valueOf(rs.getString("TipoOpercao"));
+        BigDecimal quantidade = rs.getBigDecimal("Quantidade");
+        LocalDate dataOperacao = rs.getDate("Data").toLocalDate();
+        BigDecimal cotacaoNaData = buscarCotacaoPorData(dataOperacao);
+        String tipoOperacao = rs.getString("TipoOperacao");
+        TipoMovimentacao tipo = TipoMovimentacao.fromCodigo(tipoOperacao.charAt(0));
         return new Movimentacao(
-                rs.getInt("idMovimento"),
-                rs.getInt("idCarteira"),
-                rs.getDate("dataOperacao").toLocalDate(),
+                rs.getInt("IdMovimento"),
+                rs.getInt("IdCarteira"),
+                dataOperacao,
                 tipo,
                 quantidade,
                 cotacaoNaData
         );
+    }
+
+    private BigDecimal buscarCotacaoPorData(LocalDate data) {
+        if (data == null) {
+            return null;
+        }
+
+        String sql = "SELECT Cotacao FROM ORACULO WHERE Data = ?";
+        try (PreparedStatement ps = DatabaseConnection.getInstancia().getConexao().prepareStatement(sql)) {
+            ps.setDate(1, Date.valueOf(data));
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getBigDecimal("Cotacao");
+                }
+            }
+        } catch (SQLException e) {
+            return null;
+        }
+        return null;
     }
 }

@@ -15,9 +15,9 @@ public class AjudaView {
         System.out.println("\n=======================================");
             System.out.println("          MENU DE AJUDA       ");
             System.out.println("=======================================");
-        System.out.println("1. Como usar o sistema (Ajuda)");
-        System.out.println("2. Créditos do Sistema");
-        System.out.println("0. Voltar ao Menu Principal");
+        System.out.println("1. Como usar o sistema");
+        System.out.println("2. Créditos do sistema");
+        System.out.println("0. Voltar ao menu principal");
         System.out.print("Escolha uma opção: ");
         
         try {
@@ -31,10 +31,11 @@ public class AjudaView {
         System.out.println("\n-----| COMO USAR O FT COIN |-----");
         System.out.println("O FT Coin é um sistema de acompanhamento de carteira de moeda virtual.");
         System.out.println("\nFUNCIONALIDADES:");
-        System.out.println("- CARTEIRA: Você pode incluir, consultar, editar ou excluir suas carteiras.");
-        System.out.println("- MOVIMENTAÇÃO: Registre compras (C) ou vendas (V) de moedas virtuais vinculadas a uma carteira.");
-        System.out.println("- RELATÓRIOS: Acompanhe o saldo, o histórico de movimentações e veja o ganho/perda de acordo com a cotação do Oráculo.");
-        System.out.println("\nDICA: Certifique-se de cadastrar uma carteira antes de tentar realizar movimentações ;)");
+        System.out.println("- CARTEIRA: inclua, consulte, edite ou exclua carteiras.");
+        System.out.println("- MOVIMENTAÇÃO: registre compras (C) e vendas (V) vinculadas a uma carteira.");
+        System.out.println("- RELATÓRIOS: acompanhe o saldo, o histórico e o ganho/perda conforme a cotação do Oráculo.");
+        System.out.println("- ORÁCULO: consulte a cotação de uma data específica.");
+        System.out.println("\nDICA: cadastre uma carteira antes de registrar movimentações.");
         System.out.println("---------------------------\n");
         pausar();
     }
@@ -44,8 +45,9 @@ public class AjudaView {
         System.out.println("Sistema: FT Coin");
         System.out.println("Versão: 1.0");
         System.out.println("Data: Junho de 2026");
-        System.out.println("Desenvolvido por: Grupo 01 (Ana Julia Maximo, Bárbara Helóra, Beatriz Moreira, Raíssa Souza, Thiago Yuiti, Vinicius Romão, Yasmin Caetano)");
-        System.out.println("Copyright (c) 2026 Faculdade de Tecnologia - Unicamp");
+        System.out.println("Desenvolvido por: Grupo 01");
+        System.out.println("Integrantes: Ana Julia Maximo, Bárbara Helóra, Beatriz Moreira, Raíssa Souza, Thiago Yuiti, Vinicius Romão e Yasmin Caetano");
+        System.out.println("Copyright (c) 2026 - Faculdade de Tecnologia - Unicamp");
         System.out.println("---------------------------\n");
         pausar();
     }

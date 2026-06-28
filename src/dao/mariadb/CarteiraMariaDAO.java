@@ -11,7 +11,7 @@ public class CarteiraMariaDAO implements CarteiraDAO {
 
     @Override
     public void inserir(Carteira carteira) {
-        String sql = "INSERT INTO CARTEIRA (identificador, nomeTitular, corretora) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO CARTEIRA (IdCarteira, Titular, Corretora) VALUES (?, ?, ?)";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -26,7 +26,7 @@ public class CarteiraMariaDAO implements CarteiraDAO {
 
     @Override
     public Carteira consultar(int identificador) {
-        String sql = "SELECT * FROM CARTEIRA WHERE identificador = ?";
+        String sql = "SELECT * FROM CARTEIRA WHERE IdCarteira = ?";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -44,7 +44,7 @@ public class CarteiraMariaDAO implements CarteiraDAO {
 
     @Override
     public void atualizar(Carteira carteira) {
-        String sql = "UPDATE CARTEIRA SET nomeTitular = ?, corretora = ? WHERE identificador = ?";
+        String sql = "UPDATE CARTEIRA SET Titular = ?, Corretora = ? WHERE IdCarteira = ?";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -59,7 +59,7 @@ public class CarteiraMariaDAO implements CarteiraDAO {
 
     @Override
     public void excluir(int identificador) {
-        String sql = "DELETE FROM CARTEIRA WHERE identificador = ?";
+        String sql = "DELETE FROM CARTEIRA WHERE IdCarteira = ?";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -73,7 +73,7 @@ public class CarteiraMariaDAO implements CarteiraDAO {
     @Override
     public List<Carteira> listarTodas() {
         List<Carteira> lista = new ArrayList<>();
-        String sql = "SELECT * FROM CRTEIRA";
+        String sql = "SELECT * FROM CARTEIRA";
         try (Statement st = DatabaseConnection.getInstancia()
                 .getConexao().createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -89,9 +89,9 @@ public class CarteiraMariaDAO implements CarteiraDAO {
 
     private Carteira mapear(ResultSet rs) throws SQLException {
         return new Carteira(
-                rs.getInt("identificador"),
-                rs.getString("nomeTitular"),
-                rs.getString("corretora")
+                rs.getInt("IdCarteira"),
+                rs.getString("Titular"),
+                rs.getString("Corretora")
         );
     }
 }

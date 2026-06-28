@@ -41,7 +41,7 @@ public class CarteiraView {
                     default -> System.out.println("Opção inválida! Tente novamente.");
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Erro: Por favor, digite apenas números.");
+                System.out.println(ConsoleColors.colorize("Erro: Por favor, digite apenas números.", ConsoleColors.RED));
                 scanner.nextLine();
             }
         } while (opcao != 0);
@@ -60,7 +60,7 @@ public class CarteiraView {
             String corretora = scanner.nextLine();
 
             controller.incluirCarteira(id, nome, corretora);
-            System.out.println("[SUCESSO] Carteira cadastrada!");
+            System.out.println(ConsoleColors.colorize("[SUCESSO] Carteira cadastrada!", ConsoleColors.GREEN));
         } catch (IllegalArgumentException e) {
             System.out.println("[ERRO] " + e.getMessage());
         }
@@ -73,7 +73,7 @@ public class CarteiraView {
             scanner.nextLine();
 
             Carteira carteira = controller.consultarCarteira(id);
-            System.out.println("[RESULTADO] " + carteira.toString());
+            System.out.println(ConsoleColors.colorize("[RESULTADO] " + carteira.toString(), ConsoleColors.CYAN));
         } catch (IllegalArgumentException e) {
             System.out.println("[ERRO] " + e.getMessage());
         }
@@ -92,7 +92,7 @@ public class CarteiraView {
             String novaCorretora = scanner.nextLine();
 
             controller.editarCarteira(id, novoNome, novaCorretora);
-            System.out.println("[SUCESSO] Carteira atualizada!");
+            System.out.println(ConsoleColors.colorize("[SUCESSO] Carteira atualizada!", ConsoleColors.GREEN));
         } catch (IllegalArgumentException e) {
             System.out.println("[ERRO] " + e.getMessage());
         }
@@ -105,7 +105,7 @@ public class CarteiraView {
             scanner.nextLine();
 
             controller.excluirCarteira(id);
-            System.out.println("[SUCESSO] Carteira excluída!");
+            System.out.println(ConsoleColors.colorize("[SUCESSO] Carteira excluída!", ConsoleColors.GREEN));
         } catch (IllegalArgumentException e) {
             System.out.println("[ERRO] " + e.getMessage());
         }

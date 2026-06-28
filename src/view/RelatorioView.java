@@ -1,5 +1,6 @@
 package src.view;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,6 +15,13 @@ public class RelatorioView {
     public RelatorioView(RelatorioController controller) {
         this.controller = controller;
         this.scanner = new Scanner(System.in);
+    }
+
+    private String formatarValor(BigDecimal valor) {
+        if (valor == null) {
+            return "0";
+        }
+        return valor.stripTrailingZeros().toPlainString();
     }
 
     public void exibirMenu() {
@@ -49,7 +57,7 @@ public class RelatorioView {
                     case 3 -> {
                         System.out.print("Digite o ID da carteira: ");
                         int id = scanner.nextInt();
-                        System.out.println("Saldo de moedas: " + controller.calcularSaldoAtual(id));
+                        System.out.println("Saldo de moedas: " + formatarValor(controller.calcularSaldoAtual(id)));
                     }
                     case 4 -> {
                         System.out.print("Digite o ID da carteira: ");
@@ -65,17 +73,18 @@ public class RelatorioView {
                     case 5 -> {
                         System.out.println("\n-----| GANHO OU PERDA |-----");
                         for (Carteira c : controller.listarOrdenadasPorId()) {
-                            BigDecimal resultado = controller.calcularGanhoOuPerda(c.getIdentificador());
-                            String status = resultado.compareTo(BigDecimal.ZERO) >= 0 ? "[LUCRO]" : "[PREJUÍZO]";
-                            System.out.printf("ID %d | Titular: %s | Balanço: R$ %s %s\n", 
+                            BigDecimal resultado = controller.calcularGanhoOuPerda(c.getIdentificador())
+                                    .setScale(2, RoundingMode.HALF_UP);
+                            String status = resultado.compareTo(BigDecimal.ZERO) >= 0 ? ConsoleColors.colorize("[LUCRO]", ConsoleColors.GREEN) : ConsoleColors.colorize("[PREJUÍZO]", ConsoleColors.RED);
+                            System.out.printf("ID %d | Titular: %s | Balanço: R$ %.2f %s%n",
                                 c.getIdentificador(), c.getNomeTitular(), resultado, status);
                         }
                     }
                     case 0 -> System.out.println("Voltando...");
-                    default -> System.out.println("Opção inválida!");
+                    default -> System.out.println(ConsoleColors.colorize("Opção inválida!", ConsoleColors.RED));
                 }
             } catch (Exception e) {
-                System.out.println("Erro: " + e.getMessage());
+                System.out.println(ConsoleColors.colorize("Erro: " + e.getMessage(), ConsoleColors.RED));
                 scanner.nextLine();
             }
         } while (opcao != 0);

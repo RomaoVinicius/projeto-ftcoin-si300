@@ -9,4 +9,5 @@ public interface MovimentacaoDAO {
     void atualizar(Movimentacao movimentacao);
     void excluir(int id);
     List<Movimentacao> listarTodas();
+    List<Movimentacao> listarPorCarteira(int idCarteira);
 }

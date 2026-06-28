@@ -15,13 +15,13 @@ import java.time.LocalDate;// adicionada para corrigir os problemas 2 e 3
 
 public class CotacaoMariaDAO implements CotacaoDAO {
     // Tabela: ORACULO (maiúsculas)
-    // Coluna da data: "data" (não "dataCotacao")
-    // Coluna do valor: "cotacao" (não "cotacao")
+    // Coluna da data: "Data"
+    // Coluna do valor: "Cotacao"
 
     @Override
     public void inserir(Cotacao cotacao) {
-        String sql = "INSERT INTO ORACULO (data, cotacao) VALUES (?, ?) " +
-                "ON DUPLICATE KEY UPDATE cotacao = ?";
+        String sql = "INSERT INTO ORACULO (Data, Cotacao) VALUES (?, ?) " +
+                "ON DUPLICATE KEY UPDATE Cotacao = ?";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -35,15 +35,13 @@ public class CotacaoMariaDAO implements CotacaoDAO {
     }
 
     
-    public Cotacao consultar(LocalDate idDate) {
-        // Como a tabela usa a data como chave, esta busca por "id" não é aplicável direntamente
-        // manti para atender a interface; usar consultarPorData()
-        throw new UnsupportedOperationException(
-                "Use consultarPorData(LocalDate) para a implementação SQL.");
+    @Override
+    public Cotacao consultar(LocalDate data) {
+        return consultarPorData(data);
     }
 
     public Cotacao consultarPorData(java.time.LocalDate data) {
-        String sql = "SELECT * FROM ORACULO WHERE data = ?";
+        String sql = "SELECT * FROM ORACULO WHERE Data = ?";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -73,7 +71,7 @@ public class CotacaoMariaDAO implements CotacaoDAO {
     @Override
     public List<Cotacao> listarTodas() {
         List<Cotacao> lista = new ArrayList<>();
-        String sql = "SELECT * FROM ORACULO ORDER BY data";
+        String sql = "SELECT * FROM ORACULO ORDER BY Data";
         try (Statement st = DatabaseConnection.getInstancia()
                 .getConexao().createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -88,8 +86,8 @@ public class CotacaoMariaDAO implements CotacaoDAO {
     }
     //correção do problema 2: lê "data" e "cotacao" nomes exatos do banco.
     private Cotacao mapear(ResultSet rs) throws SQLException {
-        BigDecimal valor = rs.getBigDecimal("cotacao");
-        java.time.LocalDate data = rs.getDate("data").toLocalDate();
+        BigDecimal valor = rs.getBigDecimal("Cotacao");
+        java.time.LocalDate data = rs.getDate("Data").toLocalDate();
         return new Cotacao(data, valor);
     }
 }

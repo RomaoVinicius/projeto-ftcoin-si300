@@ -1,22 +1,27 @@
 package src.controller;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import src.dao.CarteiraDAO;
+import src.dao.CotacaoDAO;
 import src.dao.MovimentacaoDAO;
+import src.model.Carteira;
+import src.model.Cotacao;
 import src.model.Movimentacao;
 import src.model.TipoMovimentacao;
-import src.model.Carteira;
 
 public class RelatorioController {
 
     private final CarteiraDAO carteiraDAO;
     private final MovimentacaoDAO movimentacaoDAO;
+    private final CotacaoDAO cotacaoDAO;
 
-    public RelatorioController(CarteiraDAO carteiraDAO, MovimentacaoDAO movimentacaoDAO) {
+    public RelatorioController(CarteiraDAO carteiraDAO, MovimentacaoDAO movimentacaoDAO, CotacaoDAO cotacaoDAO) {
         this.carteiraDAO = carteiraDAO;
         this.movimentacaoDAO = movimentacaoDAO;
+        this.cotacaoDAO = cotacaoDAO;
     }
 
     //requisito 1: listar carteiras ordenadas por ID
@@ -40,13 +45,11 @@ public class RelatorioController {
         }
         
         BigDecimal saldo = BigDecimal.ZERO;
-        for (Movimentacao m : movimentacaoDAO.listarTodas()) {
-            if (m.getIdCarteira() == idCarteira) {
-                if (m.getTipoMovimentacao() == TipoMovimentacao.COMPRA) {
-                    saldo = saldo.add(m.getQuantidade());
-                } else {
-                    saldo = saldo.subtract(m.getQuantidade());
-                }
+        for (Movimentacao m : movimentacaoDAO.listarPorCarteira(idCarteira)) {
+            if (m.getTipoMovimentacao() == TipoMovimentacao.COMPRA) {
+                saldo = saldo.add(m.getQuantidade());
+            } else {
+                saldo = saldo.subtract(m.getQuantidade());
             }
         }
         return saldo;
@@ -57,8 +60,7 @@ public class RelatorioController {
         if (carteiraDAO.consultar(idCarteira) == null) {
             throw new IllegalArgumentException("Carteira não existe.");
         }
-        return movimentacaoDAO.listarTodas().stream()
-                .filter(m -> m.getIdCarteira() == idCarteira)
+        return movimentacaoDAO.listarPorCarteira(idCarteira).stream()
                 .sorted(Comparator.comparing(Movimentacao::getDataOperacao))
                 .collect(Collectors.toList());
     }
@@ -73,32 +75,21 @@ public class RelatorioController {
         BigDecimal totalRecebido = BigDecimal.ZERO;
         BigDecimal saldoTokens = BigDecimal.ZERO;
 
-        for (Movimentacao m : movimentacaoDAO.listarTodas()) {
-            if (m.getIdCarteira() == idCarteira) {
-                BigDecimal valorDaOperacao = m.getQuantidade().multiply(m.getCotacaoNaData());
-                if (m.getTipoMovimentacao() == TipoMovimentacao.COMPRA) {
-                    totalGasto = totalGasto.add(valorDaOperacao);
-                    saldoTokens = saldoTokens.add(m.getQuantidade());
-                } else {
-                    totalRecebido = totalRecebido.add(valorDaOperacao);
-                    saldoTokens = saldoTokens.subtract(m.getQuantidade());
-                }
+        for (Movimentacao m : movimentacaoDAO.listarPorCarteira(idCarteira)) {
+            BigDecimal valorDaOperacao = m.getQuantidade().multiply(m.getCotacaoNaData());
+            if (m.getTipoMovimentacao() == TipoMovimentacao.COMPRA) {
+                totalGasto = totalGasto.add(valorDaOperacao);
+                saldoTokens = saldoTokens.add(m.getQuantidade());
+            } else {
+                totalRecebido = totalRecebido.add(valorDaOperacao);
+                saldoTokens = saldoTokens.subtract(m.getQuantidade());
             }
         }
 
-        //usa a cotação da última movimentação como cotação atual (aproximação)
-        BigDecimal cotacaoAtual = buscarUltimaCotacaoDaCarteira(idCarteira);
+        Cotacao cotacaoHoje = cotacaoDAO.consultar(LocalDate.now());
+        BigDecimal cotacaoAtual = cotacaoHoje != null ? cotacaoHoje.getValor() : BigDecimal.ZERO;
         BigDecimal patrimonioHoje = saldoTokens.multiply(cotacaoAtual);
 
         return patrimonioHoje.add(totalRecebido).subtract(totalGasto);
-    }
-
-    //método auxiliar: pega a cotação da movimentação mais recente da carteira
-    private BigDecimal buscarUltimaCotacaoDaCarteira(int idCarteira) {
-        return movimentacaoDAO.listarTodas().stream()
-                .filter(m -> m.getIdCarteira() == idCarteira)
-                .max(Comparator.comparing(Movimentacao::getDataOperacao))
-                .map(Movimentacao::getCotacaoNaData)
-                .orElse(BigDecimal.ZERO);
     }
 }
