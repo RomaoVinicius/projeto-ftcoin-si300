@@ -7,13 +7,13 @@ import java.time.LocalDate;// adicionada para corrigir os problemas 2 e 3
 
 public class CotacaoMariaDAO implements CotacaoDAO {
     // Tabela: ORACULO (maiúsculas)
-    // Coluna da data: "Data" (não "dataCotacao")
-    // Coluna do valor: "Cotacao" (não "cotacao")
+    // Coluna da data: "data" (não "dataCotacao")
+    // Coluna do valor: "cotacao" (não "cotacao")
 
     @Override
     public void inserir(Cotacao cotacao) {
-        String sql = "INSERT INTO ORACULO (Data, Cotacao) VALUES (?, ?) " +
-                "ON DUPLICATE KEY UPDATE Cotacao = ?";
+        String sql = "INSERT INTO ORACULO (data, cotacao) VALUES (?, ?) " +
+                "ON DUPLICATE KEY UPDATE cotacao = ?";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -35,7 +35,7 @@ public class CotacaoMariaDAO implements CotacaoDAO {
     }
 
     public Cotacao consultarPorData(java.time.LocalDate data) {
-        String sql = "SELECT * FROM ORACULO WHERE Data = ?";
+        String sql = "SELECT * FROM ORACULO WHERE data = ?";
         try (PreparedStatement ps = DatabaseConnection.getInstancia()
                 .getConexao().prepareStatement(sql)) {
 
@@ -65,7 +65,7 @@ public class CotacaoMariaDAO implements CotacaoDAO {
     @Override
     public List<Cotacao> listarTodas() {
         List<Cotacao> lista = new ArrayList<>();
-        String sql = "SELECT * FROM ORACULO ORDER BY Data";
+        String sql = "SELECT * FROM ORACULO ORDER BY data";
         try (Statement st = DatabaseConnection.getInstancia()
                 .getConexao().createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -78,10 +78,10 @@ public class CotacaoMariaDAO implements CotacaoDAO {
         }
         return lista;
     }
-    //correção do problema 2: lê "Data" e "Cotacao" — nomes exatos do banco.
+    //correção do problema 2: lê "data" e "cotacao" nomes exatos do banco.
     private Cotacao mapear(ResultSet rs) throws SQLException {
-        BigDecimal valor = rs.getBigDecimal("Cotacao");
-        java.time.LocalDate data = rs.getDate("Data").toLocalDate();
+        BigDecimal valor = rs.getBigDecimal("cotacao");
+        java.time.LocalDate data = rs.getDate("data").toLocalDate();
         return new Cotacao(0, data, valor);
     }
 }
