@@ -1,7 +1,8 @@
-//package ftcoin.dao.sql;(o projeto não usa pacotes, e esse package quebrava todos os import dos outros arquivos)
+package src.db;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
 
 // Gerencia a conexão única (Singleton) com o banco de dados MariaDB.
 public final class DatabaseConnection {

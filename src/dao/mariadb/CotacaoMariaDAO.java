@@ -90,6 +90,6 @@ public class CotacaoMariaDAO implements CotacaoDAO {
     private Cotacao mapear(ResultSet rs) throws SQLException {
         BigDecimal valor = rs.getBigDecimal("cotacao");
         java.time.LocalDate data = rs.getDate("data").toLocalDate();
-        return new Cotacao(0, data, valor);
+        return new Cotacao(data, valor);
     }
 }
