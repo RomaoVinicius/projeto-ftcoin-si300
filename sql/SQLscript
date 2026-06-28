@@ -4,15 +4,15 @@ CREATE DATABASE IF NOT EXISTS ftcoin;
 USE ftcoin;
 
 --2 Criando a tabela Carteira
-CREATE TABLE IF NOT EXISTS Carteira (
+CREATE TABLE IF NOT EXISTS CARTEIRA (
     identificador INT PRIMARY KEY,
     nomeTitular   VARCHAR(100) NOT NULL,
     corretora     VARCHAR(100) NOT NULL
-);
+)ENGINE=InnoDB;
 
 -- 3 Criando a tabela Movimentacao
-CREATE TABLE Movimentacao (
-    identificador INT PRIMARY KEY,
+CREATE TABLE MOVIMENTACAO (
+    idMovimento   INT PRIMARY KEY AUTO_INCREMENT,
     idCarteira    INT NOT NULL,
     dataOperacao  DATE NOT NULL,
     tipoOperacao  CHAR(1) NOT NULL,
@@ -24,16 +24,17 @@ CREATE TABLE Movimentacao (
     CONSTRAINT chk_tipo_operacao CHECK (tipoOperacao IN ('C','V'))
 ) ENGINE=InnoDB;
 
--- 4 Criando tabela Oraculo(COTAÇÂO)
-CREATE TABLE IF NOT EXISTS Oraculo (
-    dataCotacao DATE PRIMARY KEY,
+-- 4 Criando tabela Oraculo(cotação)
+CREATE TABLE IF NOT EXISTS ORACULAO (
+    data        DATE PRIMARY KEY,
     cotacao     DECIMAL(18,8) NOT NULL CHECK (cotacao >= 0)
 );
 
 -- 5 Indices auxiliares para otimização de consultas
 CREATE INDEX idx_movimentacao_carteira ON Movimentacao(idCarteira);
 CREATE INDEX idx_movimentacao_data ON Movimentacao(dataOperacao);
-CREATE INDEX idx_oraculo_data ON Oraculo(dataCotacao);
+
+-- CREATE INDEX idx_oraculo_data ON Oraculo(dataCotacao); 
 
 -- 6 Inserindo dados de exemplo
 -- INSERT INTO Carteira (identificador, nomeTitular, corretora) VALUES
