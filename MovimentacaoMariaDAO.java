@@ -54,9 +54,10 @@ public class MovimentacaoMariaDAO implements MovimentacaoDAO {
                 .getConexao().prepareStatement(sql)) {
 
             ps.setDate(1, Date.valueOf(movimentacao.getDataOperacao()));
-            ps.setString(2, String.valueOf(movimentacao.getTipoOperacao()));//corrigir entrada pra C ou V
-            ps.setBigDecimal(3, movimentacao.getQuantidade());
-            ps.setInt(4, movimentacao.getIdMovimento());
+            ps.setString(2, String.valueOf(tipoOperacao.COMPRA.getCodigo()));//'C'
+            ps.setString(3, String.valueOf(tipoOperacao.VENDA.getCodigo()));// 'V'
+            ps.setBigDecimal(4, movimentacao.getQuantidade());
+            ps.setInt(5, movimentacao.getIdMovimento());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Erro ao atualizar movimentação: " + e.getMessage());
