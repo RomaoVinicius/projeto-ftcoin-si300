@@ -1,60 +1,102 @@
-package src.dao;
-
-import src.model.Carteira;
-import src.dao.memoria.CarteiraDAOMemoria;
-import src.dao.mariadb.CarteiraDAOMariadb; 
-import java.util.List;
+package src.model;
 
 /**
- * Interface selada para o padrão DAO da entidade Carteira.
+ * Representa uma carteira de moedas virtuais no sistema FT_Coin.
  * <p>
- * Define os contratos para as operações de CRUD (Create, Read, Update, Delete)
- * referentes às carteiras. Utiliza o recurso de Sealed Interfaces do Java para
- * garantir que apenas as implementações de Memória e MariaDB sejam permitidas.
+ * Esta classe é o modelo que armazena os dados básicos da carteira,
+ * refletindo a tabela Carteira do banco de dados.
  * </p>
  *
  * @author Ana Julia Bandeira Maximo
  * @version 2.0
  * @since 2026
  */
-public sealed interface CarteiraDAO permits CarteiraDAOMemoria, CarteiraDAOMariadb {
+public class Carteira {
+    
+    /**
+     * O identificador único da carteira.
+     */
+    private int identificador;
+    
+    /**
+     * O nome completo do titular da carteira.
+     */
+    private String nomeTitular;
+    
+    /**
+     * O nome da corretora responsável.
+     */
+    private String corretora;
 
     /**
-     * Inclui uma nova carteira no banco de dados.
+     * Constrói uma nova {@code Carteira} com os dados especificados.
      *
-     * @param carteira o objeto Carteira a ser inserido
-     * @throws Exception caso ocorra um erro de validação (ex: ID duplicado)
+     * @param identificador o identificador único da carteira
+     * @param nomeTitular o nome do titular da carteira
+     * @param corretora o nome da corretora
      */
-    void incluir(Carteira carteira) throws Exception;
+    public Carteira(int identificador, String nomeTitular, String corretora) {
+        this.identificador = identificador;
+        this.nomeTitular = nomeTitular;
+        this.corretora = corretora;
+    }
 
     /**
-     * Consulta uma carteira pelo seu identificador único.
+     * Retorna o identificador único da carteira.
      *
-     * @param identificador o ID da carteira
-     * @return a Carteira encontrada, ou {@code null} se não existir
+     * @return o identificador da carteira
      */
-    Carteira consultar(int identificador);
+    public int getIdentificador() {
+        return identificador;
+    }
 
     /**
-     * Edita os dados de uma carteira já existente.
+     * Define o identificador único da carteira.
      *
-     * @param carteira o objeto Carteira com os dados atualizados
-     * @throws Exception caso a carteira não seja encontrada
+     * @param identificador o novo identificador a ser atribuído
      */
-    void editar(Carteira carteira) throws Exception;
+    public void setIdentificador(int identificador) {
+        this.identificador = identificador;
+    }
 
     /**
-     * Exclui uma carteira com base no seu identificador.
+     * Retorna o nome do titular da carteira.
      *
-     * @param identificador o ID da carteira a ser removida
-     * @throws Exception caso a carteira não seja encontrada
+     * @return o nome do titular
      */
-    void excluir(int identificador) throws Exception;
+    public String getNomeTitular() {
+        return nomeTitular;
+    }
 
     /**
-     * Retorna a lista de todas as carteiras cadastradas.
+     * Define o nome do titular da carteira.
      *
-     * @return uma lista contendo todas as carteiras
+     * @param nomeTitular o novo nome do titular a ser atribuído
      */
-    List<Carteira> listarTodas();
+    public void setNomeTitular(String nomeTitular) {
+        this.nomeTitular = nomeTitular;
+    }
+
+    /**
+     * Retorna a corretora da carteira.
+     *
+     * @return a corretora
+     */
+    public String getCorretora() {
+        return corretora; 
+    }
+
+    /**
+     * Define a corretora da carteira.
+     *
+     * @param corretora a nova corretora a ser atribuída
+     */
+    public void setCorretora(String corretora) {
+        this.corretora = corretora; 
+    }
+
+    @Override
+    public String toString() {
+        return String.format("ID: %d | Titular: %s | Corretora: %s", identificador, nomeTitular, corretora);
+    }
 }
